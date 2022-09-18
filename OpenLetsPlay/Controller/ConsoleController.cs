@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace OpenLetsPlay;
+namespace OpenLetsPlay.Controller;
 
 public static class ConsoleController
 {

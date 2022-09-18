@@ -30,12 +30,12 @@ public static class Logger
 
     private static void LogConsole(string message)
     {
-        Console.WriteLine($"\t{message}");
+        Console.WriteLine(message);
     }
 
     public static void LogImportant(string message, string title, string? popupMessage = null)
     {
-        Console.WriteLine($"\t{message}");
+        Console.WriteLine(message);
 
         if (!Config.Silent)
             MessageBox.Show(popupMessage ?? message, $"{Console.Title}: {title}", MessageBoxButton.OK);

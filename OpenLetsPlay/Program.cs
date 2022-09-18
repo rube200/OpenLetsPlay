@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text.Json;
 using System.Windows;
+using OpenLetsPlay.Controller;
 
 namespace OpenLetsPlay;
 
@@ -140,7 +141,7 @@ public class Program
         if (Config.Debug)
         {
             var config = JsonSerializer.Serialize(Config.Instance, new JsonSerializerOptions { WriteIndented = true });
-            Console.WriteLine(config);
+            Logger.LogDebug(config);
         }
 
         Program program;

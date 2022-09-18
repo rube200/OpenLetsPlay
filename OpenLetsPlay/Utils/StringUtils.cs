@@ -1,4 +1,4 @@
-﻿namespace OpenLetsPlay;
+﻿namespace OpenLetsPlay.Utils;
 
 public static class StringUtils
 {

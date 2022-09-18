@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using OpenLetsPlay.Utils;
 
 namespace OpenLetsPlay;
 
@@ -60,6 +61,7 @@ public class Config
     public bool waitStart { get; private set; }
     public string? arguments { get; private set; }
     public string? gamePath { get; private set; }
+
     public string? gameDir { get; private set; }
     // ReSharper restore MemberCanBePrivate.Global
     // ReSharper restore InconsistentNaming
