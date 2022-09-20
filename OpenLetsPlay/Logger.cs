@@ -13,7 +13,12 @@ public static class Logger
         LogConsole(message);
     }
 
-    public static void LogException(this Exception ex, string message, string title = "ERROR!!!")
+    public static void LogException(this Exception ex, string title)
+    {
+        LogImportant($"{ex}", title);
+    }
+
+    public static void LogException(this Exception ex, string message, string title)
     {
         LogImportant($"{message}:{Environment.NewLine}{ex}", title, message);
     }
