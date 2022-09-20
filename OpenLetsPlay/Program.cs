@@ -43,11 +43,21 @@ public class Program
         {
             StartGame();
             CheckGame();
+        }
+        catch (Exception ex)
+        {
+            ex.LogException("Error while working with the game", "Game not started!");
+            Environment.Exit(ex.HResult);
+            return;
+        }
+
+        try
+        {
             WaitGame();
         }
         catch (Exception ex)
         {
-            ex.LogException("Error while working with the game");
+            ex.LogException("Game crash!");
             Environment.Exit(ex.HResult);
             return;
         }
@@ -108,6 +118,16 @@ public class Program
 
         Logger.LogInfo("Waiting for the game to stop...");
         _process!.WaitForExit();
+
+        var exitCode = _process.ExitCode;
+        _process.Dispose();
+
+        if (exitCode != 0)
+            throw new Exception($"Game crashed! Code. {exitCode}")
+            {
+                HResult = exitCode
+            };
+
         Logger.LogInfo("Game stopped!");
     }
 
