@@ -30,7 +30,8 @@ public class Program
         {
             Arguments = Config.Arguments,
             FileName = Config.GamePath,
-            WorkingDirectory = gameDir
+            WorkingDirectory = gameDir,
+            UseShellExecute = true
         };
     }
 
