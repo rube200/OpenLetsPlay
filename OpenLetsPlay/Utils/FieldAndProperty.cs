@@ -9,11 +9,13 @@ public class FieldAndProperty
 
     private readonly FieldInfo? _field;
     private readonly PropertyInfo? _property;
+    private readonly Type _type;
     public readonly string Name;
 
     public FieldAndProperty(FieldInfo field)
     {
         _field = field ?? throw new NullReferenceException($"FieldAndProperty: {nameof(field)} can not be null.");
+        _type = field.FieldType;
         Name = field.Name;
     }
 
@@ -21,6 +23,7 @@ public class FieldAndProperty
     {
         _property = property ??
                     throw new NullReferenceException($"FieldAndProperty: {nameof(property)} can not be null.");
+        _type = _property.PropertyType;
         Name = property.Name;
     }
 
@@ -33,8 +36,9 @@ public class FieldAndProperty
     {
         try
         {
-            _field?.SetValue(instance, value);
-            _property?.SetValue(instance, value);
+            var valueConverted = Convert.ChangeType(value, _type);
+            _field?.SetValue(instance, valueConverted);
+            _property?.SetValue(instance, valueConverted);
         }
         catch (Exception ex)
         {
