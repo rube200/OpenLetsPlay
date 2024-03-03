@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 namespace OpenLetsPlay.Utils;
 
@@ -42,7 +43,7 @@ public class FieldAndProperty
         }
         catch (Exception ex)
         {
-            var msg = ExMsg.GetValue(ex) as string;
+            var msg = ex.Message;
             ExMsg.SetValue(ex, $"{Name}({value}): {msg}");
             throw;
         }

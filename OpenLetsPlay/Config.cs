@@ -1,8 +1,11 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using OpenLetsPlay.Utils;
 
 namespace OpenLetsPlay;
 
+[Serializable]
 public class Config
 {
     public static readonly IReadOnlyDictionary<string, FieldAndProperty> SelfComponents;
@@ -51,9 +54,8 @@ public class Config
         SelfComponents[parameter].SetValue(value, Instance);
     }
 
-    // ReSharper disable UnusedAutoPropertyAccessor.Local
+#pragma warning disable IDE1006
     // ReSharper disable InconsistentNaming
-    // ReSharper disable MemberCanBePrivate.Global
     public bool debug { get; private set; }
     public bool noWaitGame { get; private set; }
     public bool silent { get; private set; }
@@ -61,9 +63,7 @@ public class Config
     public bool waitStart { get; private set; }
     public string? arguments { get; private set; }
     public string? gamePath { get; private set; }
-
     public string? gameDir { get; private set; }
-    // ReSharper restore MemberCanBePrivate.Global
     // ReSharper restore InconsistentNaming
-    // ReSharper restore UnusedAutoPropertyAccessor.Local
+#pragma warning restore IDE1006
 }

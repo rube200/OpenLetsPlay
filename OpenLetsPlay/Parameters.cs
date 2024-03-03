@@ -1,4 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using OpenLetsPlay.Utils;
 
@@ -6,8 +9,8 @@ namespace OpenLetsPlay;
 
 public static class Parameters
 {
-    private static readonly IReadOnlyCollection<string> ConfigParameter = new[]
-        { "Config", "ConfigFile", "Configuration", "ConfigurationFile" };
+    private static readonly IReadOnlyCollection<string> ConfigParameter =
+        ["Config", "ConfigFile", "Configuration", "ConfigurationFile"];
 
     public static string? ConfigFile { get; private set; }
 

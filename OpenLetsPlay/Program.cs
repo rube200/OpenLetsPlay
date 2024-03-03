@@ -1,6 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using OpenLetsPlay.Controller;
 
@@ -76,11 +79,6 @@ public class Program
 
     private static void WaitInput(string msg)
     {
-        void ShowPopup()
-        {
-            MessageBox.Show(msg, Console.Title, MessageBoxButton.OK);
-        }
-
         if (!Config.Debug)
         {
             if (Config.Silent)
@@ -102,6 +100,12 @@ public class Program
 
         Task.WaitAny(consoleTask, msgBoxTask);
         cancelToken.Cancel();
+        return;
+
+        void ShowPopup()
+        {
+            MessageBox.Show(msg, Console.Title, MessageBoxButton.OK);
+        }
     }
 
     private void CheckGame()
