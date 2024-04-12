@@ -1,19 +1,9 @@
 ﻿using System;
-using System.Windows;
 
 namespace OpenLetsPlay;
 
 public static class Logger
 {
-    // ReSharper disable once UnusedMember.Global
-    public static void LogDebug(string message)
-    {
-        if (!Config.Debug)
-            return;
-
-        LogConsole(message);
-    }
-
     public static void LogException(this Exception ex, string title)
     {
         LogImportant($"{ex}", title);
@@ -41,9 +31,8 @@ public static class Logger
 
     public static void LogImportant(string message, string title, string? popupMessage = null)
     {
-        Console.WriteLine(message);
-
-        if (!Config.Silent)
-            MessageBox.Show(popupMessage ?? message, $"{Console.Title}: {title}", MessageBoxButton.OK);
+        Console.WriteLine(title);
+        Console.WriteLine(popupMessage ?? message);
+        Console.ReadLine();
     }
 }

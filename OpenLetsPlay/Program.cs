@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using OpenLetsPlay.Controller;
 
 namespace OpenLetsPlay;
@@ -79,33 +75,14 @@ public class Program
 
     private static void WaitInput(string msg)
     {
-        if (!Config.Debug)
-        {
-            if (Config.Silent)
-                return;
-
-            ShowPopup();
-            return;
-        }
-
         if (Config.Silent)
         {
             Console.ReadLine();
             return;
         }
 
-        var cancelToken = new CancellationTokenSource();
-        var consoleTask = Task.Run(Console.ReadLine, cancelToken.Token);
-        var msgBoxTask = Task.Run(ShowPopup, cancelToken.Token);
-
-        Task.WaitAny(consoleTask, msgBoxTask);
-        cancelToken.Cancel();
-        return;
-
-        void ShowPopup()
-        {
-            MessageBox.Show(msg, Console.Title, MessageBoxButton.OK);
-        }
+        Console.WriteLine(msg);
+        Console.ReadLine();
     }
 
     private void CheckGame()
@@ -162,17 +139,10 @@ public class Program
             Environment.Exit(110);
             return;
         }
-
-        if (Config.Debug)
-        {
-            var config = JsonSerializer.Serialize(Config.Instance, new JsonSerializerOptions { WriteIndented = true });
-            Logger.LogDebug(config);
-        }
-
+        
         Program program;
         try
         {
-            ConsoleController.Enable = Config.Debug;
             program = new Program();
         }
         catch (Exception ex)

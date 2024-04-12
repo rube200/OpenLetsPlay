@@ -34,8 +34,7 @@ public class Config
     }
 
     public static Config Instance => _instance ??= new Config();
-
-    public static bool Debug => Instance.debug;
+    
     public static bool NoWaitGame => Instance.noWaitGame;
     public static bool Silent => Instance.silent;
     public static bool WaitExit => Instance.waitExit;
@@ -56,7 +55,6 @@ public class Config
 
 #pragma warning disable IDE1006
     // ReSharper disable InconsistentNaming
-    public bool debug { get; private set; }
     public bool noWaitGame { get; private set; }
     public bool silent { get; private set; }
     public bool waitExit { get; private set; }
