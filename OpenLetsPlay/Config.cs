@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using OpenLetsPlay.Utils;
 
@@ -17,17 +18,15 @@ public class Config
         var components = new Dictionary<string, FieldAndProperty>(StringComparer.OrdinalIgnoreCase);
 
         var fields = SelfType.GetFields(BindingFlags.Instance | BindingFlags.Public);
-        foreach (var field in fields)
+        foreach (var fp in fields.Select(p => new FieldAndProperty(p)))
         {
-            var fieldProp = new FieldAndProperty(field);
-            components.Add(fieldProp.Name, fieldProp);
+            components.Add(fp.Name, fp);
         }
 
         var properties = SelfType.GetProperties(BindingFlags.Instance | BindingFlags.Public);
-        foreach (var property in properties)
+        foreach (var fp in properties.Select(p => new FieldAndProperty(p)))
         {
-            var fieldProp = new FieldAndProperty(property);
-            components.Add(fieldProp.Name, fieldProp);
+            components.Add(fp.Name, fp);
         }
 
         SelfComponents = components;
