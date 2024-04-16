@@ -12,18 +12,13 @@ on:
         required: true
         
 jobs:
-  checkout_repo:
+  build_and_release:
     name: "Checkout Repository"
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
       uses: actions/checkout@master
 
-  setup_project:
-    name: "Setup Project"
-    needs: [checkout_repo]
-    runs-on: ubuntu-latest
-    steps:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@master
       with:
@@ -32,26 +27,18 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore OpenLetsPlay
 
-  install_and_update:
-    name: "Install zip & update version"
-    needs: [checkout_repo]
-    runs-on: ubuntu-latest
-    steps:
-    - name: Install zip
-      run: sudo apt-get install -y zip
-
     - name: Update version
       run: "sed -i \"s#<Version>0.0.0</Version>#<Version>${{ github.event.inputs.version }}</Version>#\" OpenLetsPlay/OpenLetsPlay.csproj"  
 
-  build_and_release:
-    name: "Build and Release"
-    needs: [setup_project, install_and_update]
-    runs-on: ubuntu-latest
-    steps:
     - name: Build Project
       run: dotnet build OpenLetsPlay --configuration Release --no-restore
+
+    - name: Install zip
+      run: sudo apt-get install -y zip
+
     - name: Zip Artifact
       run: zip -q -r ./OpenLetsPlay.zip OpenLetsPlay/bin/Release/net8.0/*
+
     - name: Release
       uses: softprops/action-gh-release@master
       env:
