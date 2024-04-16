@@ -1,0 +1,47 @@
+name: Github Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release SemVer:'
+        required: true
+      update_notes:
+        default: "-"
+        description: "Update Notes to Release"
+        required: true
+        
+jobs:
+  release_deploy:
+    name: "Release/Deployment"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@master
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@master
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore OpenLetsPlay
+
+    - name: Update version
+      run: "sed -i \"s#<Version>0.0.0</Version>#<Version>${{ github.event.inputs.version }}</Version>#\" OpenLetsPlay/OpenLetsPlay.csproj"  
+
+    - name: Build Project
+      run: dotnet build OpenLetsPlay --configuration Release --no-restore
+
+    - name: Release
+      uses: softprops/action-gh-release@master
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IS_PRE_RELEASE: ${{ endsWith(github.event.inputs.version, '-alpha') || endsWith(github.event.inputs.version, '-beta') || endsWith(github.event.inputs.version, '-rc') }}
+      with:
+        body: |
+          Notes:
+            ${{ github.event.inputs.update_notes }}
+        name: OpenLetsPlay v${{ github.event.inputs.version }}
+        prerelease: ${{ env.IS_PRE_RELEASE }}
+        tag_name: V${{ github.event.inputs.version }}
