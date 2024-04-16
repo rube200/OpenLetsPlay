@@ -48,7 +48,7 @@ jobs:
         body: |
           Notes:
             ${{ github.event.inputs.update_notes }}
-        files: ./OpenLetsPlay.zip
+        files: OpenLetsPlay/bin/Release/net8.0/OpenLetsPlay.zip
         name: OpenLetsPlay v${{ github.event.inputs.version }}
         prerelease: ${{ env.IS_PRE_RELEASE }}
         tag_name: V${{ github.event.inputs.version }}
