@@ -45,7 +45,7 @@ jobs:
       run: sudo apt-get install -y zip
 
     - name: Zip Artifact
-      run: cd ${{ build_output_dir }} && zip -q -r ./${{ release_artifact_name }} *
+      run: cd ${{ env.build_output_dir }} && zip -q -r ./${{ env.release_artifact_name }} *
 
     - name: Release
       uses: softprops/action-gh-release@master
@@ -56,7 +56,7 @@ jobs:
         body: |
           Notes:
             ${{ github.event.inputs.update_notes }}
-        files: ${{ build_output_dir }}/${{ release_artifact_name }}
+        files: ${{ env.build_output_dir }}/${{ env.release_artifact_name }}
         name: OpenLetsPlay v${{ github.event.inputs.version }}
         prerelease: ${{ env.IS_PRE_RELEASE }}
         tag_name: V${{ github.event.inputs.version }}
