@@ -15,9 +15,15 @@ jobs:
   build_and_release:
     name: "Build and Release"
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        runtime: [linux-x64, win-x64]
+
     steps:
     - name: Checkout Repository
       uses: actions/checkout@master
+      with:
+        fetch-depth: 0
 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@master
@@ -25,19 +31,19 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Restore dependencies
-      run: dotnet restore OpenLetsPlay
+      run: dotnet restore OpenLetsPlay --runtime ${{ matrix.runtime }}
 
     - name: Update version
       run: "sed -i \"s#<Version>0.0.0</Version>#<Version>${{ github.event.inputs.version }}</Version>#\" OpenLetsPlay/OpenLetsPlay.csproj"  
 
     - name: Build Project
-      run: dotnet build OpenLetsPlay --configuration Release --no-restore
+      run: dotnet build OpenLetsPlay --configuration Release --no-restore --runtime ${{ matrix.runtime }}
 
     - name: Install zip
       run: sudo apt-get install -y zip
 
     - name: Zip Artifact
-      run: cd OpenLetsPlay/bin/Release/net8.0/ && zip -q -r ./OpenLetsPlay.zip *
+      run: cd OpenLetsPlay/bin/Release/net8.0/${{ matrix.runtime }} && zip -q -r ./OpenLetsPlay-${{ matrix.runtime }}.zip *
 
     - name: Release
       uses: softprops/action-gh-release@master
@@ -48,7 +54,7 @@ jobs:
         body: |
           Notes:
             ${{ github.event.inputs.update_notes }}
-        files: OpenLetsPlay/bin/Release/net8.0/OpenLetsPlay.zip
+        files: OpenLetsPlay/bin/Release/net8.0/OpenLetsPlay-${{ matrix.runtime }}.zip
         name: OpenLetsPlay v${{ github.event.inputs.version }}
         prerelease: ${{ env.IS_PRE_RELEASE }}
         tag_name: V${{ github.event.inputs.version }}
